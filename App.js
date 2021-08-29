@@ -1,31 +1,11 @@
-import {StatusBar} from 'expo-status-bar';
 import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
-import ResultsPage from "./results/results_page";
+
+import Navigator from "./Routes/search_route";
 
 export default function App() {
 
-  const [searchString, setSearchString] = React.useState(null);
-
-  const styles = StyleSheet.create({
-    view: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    textInput: {
-      width: '80%',
-      borderColor: 'black',
-      borderWidth: 1,
-      borderRadius: 10,
-      padding: 10,
-      margin: 10
-    }
-  })
   return (
-    <View style={{marginVertical:50}}>
-      <ResultsPage/>
-    </View>
+    <Navigator/>
   );
 
 };

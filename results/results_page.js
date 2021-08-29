@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, FlatList} from "react-native";
+import {View, FlatList, Platform, ProgressBarAndroid} from "react-native";
 import ListLayout from "./list/list_layout";
+import styles from "../global/global_styles";
 
 function ResultsPage(props) {
 
@@ -11,8 +12,9 @@ function ResultsPage(props) {
 
   const getData = async () => {
     try {
-      const response = await fetch(url + '/2.3/search/advanced?page=1&pagesize=10&order=desc&sort=activity&title='+ props.title +'&site=stackoverflow');
+      const response = await fetch(url + '/2.3/search/advanced?page=1&pagesize=10&order=desc&sort=activity&title=' + props.navigation.getParam('searchItem') + '&site=stackoverflow');
       const json = await response.json();
+      console.log(props.navigation.getParam('searchItem'))
       setData(json);
     } catch (error) {
       console.error(error);
@@ -26,25 +28,35 @@ function ResultsPage(props) {
   }, []);
 
   const renderItem = ({item}) => {
-    return(
+    return (
       <ListLayout
-        key = {item.question_id.toString()}
-        score = {item.score}
-        answer_count = {item.answer_count}
-        title = {item.title}
-        tags = {item.tags}
-        time = {item.last_activity_date}
+        key={item.question_id.toString()}
+        score={item.score}
+        answer_count={item.answer_count}
+        title={item.title}
+        tags={item.tags}
+        time={item.last_activity_date}
       />
     );
   }
 
   return (
     <View>
-      <FlatList
-        data={data.items}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.question_id.toString()}
-      />
+      {isLoading ? <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 150
+        }}>
+          <ProgressBarAndroid />
+        </View> :
+        <View>
+          <FlatList
+            data={data.items}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.question_id.toString()}
+          />
+        </View>}
     </View>
   );
 }
